@@ -2,7 +2,7 @@
 
 # GitOps workshop for India summit 2021
 
-## Objective 1
+## Section 1
 
 We would like to familiarize you with the basics of  GitOps and demonstrate building a CD pipeline with EKS using the GitOps principles.  We will be using Flux v2 as a gitops operator, which runs in your EKS cluster and tracks changes to one or more Git repositories. These repositories store all manifests that define the desired state of your cluster, Flux will continuously and automatically reconcile the running state of the cluster with the state declared in code.
 
@@ -49,35 +49,56 @@ _Kustomization reconciliation_: ensures the state of the application deployed on
 
 **Kustomization** :  The `Kustomization` custom resource represents a local set of Kubernetes resources (e.g. kustomize overlay) that Flux is supposed to reconcile in the cluster. The reconciliation runs every one minute by default, but this can be changed with `.spec.interval`. If you make any changes to the cluster using `kubectl edit/patch/delete`, they will be promptly reverted. You either suspend the reconciliation or push your changes to a Git repository.
 
-![README-e564548b info](assets/README-e564548b.png)
+
+![README-e564548b](images/README-e564548b.png)
 
 ## Workshop steps
 
 ### The workflow
 
 This is the typical workflow we will be following in this workshop
-[Image: image.png]
+
+![README-d16bb15e](images/README-d16bb15e.png)
+
 ### Environment setup
 
-[Image: image.png]
+![README-19efbf44](images/README-19efbf44.png)
+
 The workshop environment template pre-creates an AWS Cloud9 IDE environment, an Amazon ECR repository and an Amazon EKS cluster.
 
 Open Cloud9 IDE environment by clicking on the `EKSCloud9EnvUrl` link from the base CloudFormation stack Outputs tab.
 
 ### Event Engine CloudFormation stack output
 
-[Image: Screenshot 2021-06-27 at 11.43.49 AM.png]
+![README-3a67edf5](images/README-3a67edf5.png)
+
 ### Default AWS Cloud9 IDE view
 
-[Image: Screenshot 2021-06-25 at 12.34.38 PM.png]The IDE window may display a modal asking if third party content may be displayed in a WebView pane in the IDE window. Click No to discard the prompt.
-[Image: Screenshot 2021-06-26 at 6.29.53 PM.png]Next we’ll need some CLI tools to be installed in the Cloud9 environment for the workshop. For that we’ll first clone a public repository with the relevant installation scripts. Open the `**Source Control**` view as shown below and clone the [eks-init-scripts](https://github.com/iamsouravin/eks-init-scripts) repository.
-[Image: image]***Note:*** *The GitHub repo for init scripts can be found here:* [*https://github.com/iamsouravin/eks-init-scripts*](https://github.com/iamsouravin/eks-init-scripts)
-[Image: Screenshot 2021-06-25 at 1.04.45 PM.png]
+![README-dee09acf](images/README-dee09acf.png)
+
+The IDE window may display a modal asking if third party content may be displayed in a WebView pane in the IDE window. Click No to discard the prompt.
+
+![](images/README-36391605.png)
+
+Next we’ll need some CLI tools to be installed in the Cloud9 environment for the workshop. For that we’ll first clone a public repository with the relevant installation scripts. Open the `**Source Control**` view as shown below and clone the [eks-init-scripts](https://github.com/iamsouravin/eks-init-scripts) repository.
+
+![README-c0275afc](images/README-c0275afc.png)
+
+***Note:*** *The GitHub repo for init scripts can be found here:* [*https://github.com/iamsouravin/eks-init-scripts*](https://github.com/iamsouravin/eks-init-scripts)
+
+
+![README-17a9a604](images/README-17a9a604.png)
+
 Confirm the clone location.
-[Image: Screenshot 2021-06-25 at 1.09.26 PM.png]Source Control view should show the cloned repository in the left pane.
-[Image: Screenshot 2021-06-25 at 1.13.24 PM.png]
+![README-166491df](images/README-166491df.png)
+
+Source Control view should show the cloned repository in the left pane.
+![README-cc82fbae](images/README-cc82fbae.png)
+
 The environment directory should reflect the below structure.
-[Image: image.png]
+![README-69a27d20](images/README-69a27d20.png)
+
+
 Open either a new terminal tab or access the existing tab and execute the `cli_tools.sh` shell script inside the cloned `eks-init-scripts` directory. The script installs tools like `jq`, `gettext`, `aws cli v2`, `kubectl`, `eksctl`, `helm` and `flux` binaries. It also exports the environment variables `AWS_ACCOUNT_ID`, `AWS_REGION` and `AWS_DEFAULT_REGION`. The script finishes off by adding a kubeconfig context of the EKS cluster where we’ll deploy flux components and application workloads.
 
 ```
@@ -106,7 +127,9 @@ Refer to below links and setup the following:
 * [GitHub -- Personal access token](https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line)[](https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line): For PAT
 
 Ensure you grant full control of private repositories.
-[Image: Screenshot 2021-06-29 at 12.26.07 PM.png]
+
+![README-9e763ee1](images/README-9e763ee1.png)
+
 * [GitHub -- Setting your username](https://help.github.com/en/github/using-git/setting-your-username-in-git) : Setting the GitHub username
 
 **Note:** The Git username is not the same as your GitHub username.
@@ -122,15 +145,19 @@ Ensure you grant full control of private repositories.
 
 Copy the contents of `~/.ssh/id_rsa.pub` and add new SSH key in your GitHub account settings.
 
-
 ```
 cat  ~/.ssh/id_rsa.pub #Copy the output
 ```
 
 Navigate to https://github.com/settings/profile and click on `SSH and GPG keys`.
-[Image: Screenshot 2021-06-28 at 10.17.48 PM.png]
+
+![README-351bd30c](images/README-351bd30c.png)
+
 Click on `New SSH key` button and add the new key.
-[Image: Screenshot 2021-06-28 at 10.20.10 PM.png][Image: Screenshot 2021-06-28 at 10.21.42 PM.png]
+
+![README-05ff29c3](images/README-05ff29c3.png)
+
+![README-d7f358a2](images/README-d7f358a2.png)
 
 ```
 `export`` GITHUB_TOKEN``=``<``YOUR_GITHUB_TOKEN``>`
@@ -162,7 +189,7 @@ Below warning of upgrading flux version can be safely ignored. The workshop cont
 
 ### Bootstrap flux tooling
 
-[Image: image.png]
+![README-157f6de9](images/README-157f6de9.png)
 
 ```
 cd ~/environment
@@ -195,7 +222,10 @@ The table below explains the parameters to the `bootstrap` command.
 The `bootstrap` command creates the well-known `flux-system` directory at the configured path to host the flux internal components. The contents of the directory should resemble the following.
 
 **Note:** Currently these files would be within “[https://github.com/$GITHUB_USER/${GITHUB_INFRA_REPO}.git](https://github.com/$GITHUB_USER/$%7BGITHUB_INFRA_REPO%7D.git)” and in one of the later steps, this would be cloned to your Cloud 9 instance.
-[Image: image.png]Later in the workshop we’ll create and commit the toolkit component manifests pointing to our application repository at the same path under `clusters/prod`.
+
+![](images/README-f368e6f1.png)
+
+Later in the workshop we’ll create and commit the toolkit component manifests pointing to our application repository at the same path under `clusters/prod`.
 
 ### Verify flux is installed and running
 
@@ -209,11 +239,13 @@ For this workshop we are going to fork and clone a pre-created application demo 
 
 In a different browser tab navigate to https://github.com/iamsouravin/gitops-demo.
 In the top-right corner of the page, click **`Fork`**.
-[Image: Screenshot 2021-05-11 at 5.38.16 PM.png]
+
+![README-63f88de6](images/README-63f88de6.png)
 
 ### Clone the forked Github repo
 
-[Image: image.png]
+![README-dc0f41a8](images/README-dc0f41a8.png)
+
 In the Cloud9 terminal change to the `environment` directory and run `git clone`
 
 ```
@@ -223,8 +255,10 @@ In the Cloud9 terminal change to the `environment` directory and run `git clone`
 
 ### Create a `GitRepository` `source` using flux
 
-[Image: image.png]
-[Image: image.png]
+![README-7317ff02](images/README-7317ff02.png)
+
+![README-77f9756a](images/README-77f9756a.png)
+
 The `source-controller` component which gets installed in the cluster as part of the flux bootstrapping process polls an artifact source location like a git repo at configured intervals and reconciles any remote changes locally in the cluster. A `GitRepository` custom resource points to a source git repository and branch to clone. The controller clones the configured branch of the remote git repository and exposes the synchronized sources from Git as an artifact in a gzip compressed TAR archive (`<commit hash>.tar.gz`). This compressed artifact becomes the input for other components like `kustomize-controller` and `helm-controller`.
 
 ```
@@ -316,8 +350,11 @@ Confirm that an archive file with the latest commit hash is created by the `sour
 
 ### Create `Kustomization` resource to deploy the `webserver` app
 
-[Image: image.png]
-[Image: image.png]The `kustomize-controller` is another Kubernetes operator that gets installed in the cluster as part of the bootstrap process. It works with a `Kustomization` CRD. The `Kustomization` CRD points to Kubernetes manifest source artifact locations that are synced by the `source-controller`. The `kustomize-controller` assembles the manifests with [Kustomize](https://kustomize.io/) to form a continuous delivery pipeline. The controller is responsible for reconciling the cluster state with the source state as received from the `source-controller`. Pruning ensures any resources removed in the source also gets removed from the cluster. Client validation ensures that all the manifests are first validated by doing a dry-run apply. The controller also keeps track of the health of the deployed workloads and reflects it in the reconciliation status.
+![README-77f9756a](images/README-77f9756a.png)
+
+![README-c9011b3a](images/README-c9011b3a.png)
+
+The `kustomize-controller` is another Kubernetes operator that gets installed in the cluster as part of the bootstrap process. It works with a `Kustomization` CRD. The `Kustomization` CRD points to Kubernetes manifest source artifact locations that are synced by the `source-controller`. The `kustomize-controller` assembles the manifests with [Kustomize](https://kustomize.io/) to form a continuous delivery pipeline. The controller is responsible for reconciling the cluster state with the source state as received from the `source-controller`. Pruning ensures any resources removed in the source also gets removed from the cluster. Client validation ensures that all the manifests are first validated by doing a dry-run apply. The controller also keeps track of the health of the deployed workloads and reflects it in the reconciliation status.
 
 ```
 cd ~/environment/$GITHUB_INFRA_REPO
@@ -361,7 +398,7 @@ Expected Output:
 [Image: image.png]
 ### Check deployment
 
-[Image: image.png]
+![README-2f19cf2d](images/README-2f19cf2d.png)
 
 ```
 kubectl get deployment webserver
@@ -373,7 +410,9 @@ webserver   2/2     2            2           6h2m
 ### Flux reverts cluster changes
 
 Flux `kustomiz-controller` tracks the values defined in the Kubernetes manifests in the app repo and continuously reconciles the cluster state to match the intents defined in the manifests. In our current deployment manifest we have set the replica count to 2.
-[Image: Screenshot 2021-06-27 at 1.22.57 PM.png]
+
+![README-3d529ea6](images/README-3d529ea6.png)
+
 We’ll verify that flux reverts any cluster changes by scaling down the deployment replica count to zero using `kubectl` and watching the deployment getting scaled back up to the pre-defined count.
 
 In the terminal tab run below command to scale the deployment replica count to 0.
@@ -388,15 +427,17 @@ Watch the replicas getting restored to original replica count. It takes around a
 watch kubectl get deployment webserver
 ```
 
-[Image: Screenshot 2021-06-27 at 1.33.46 PM.png]
+![README-8694a032](images/README-8694a032.png)
 
-[Image: Screenshot 2021-06-27 at 1.34.30 PM.png]
-[Image: Screenshot 2021-06-27 at 1.34.34 PM.png]
+![README-0f325e80](images/README-0f325e80.png)
+
+![README-0ebf19ab](images/README-0ebf19ab.png)
 
 
 ### Flux reconciles new git changes
 
-[Image: image.png]
+![](images/README-2f19cf2d.png)
+
 Get the load balancer endpoint. The load balancer FQDN can be found  under EXTERNAL_IP column.
 
 ```
@@ -415,13 +456,22 @@ export SERVICE_HOST=`kubectl get service webserver \
 watch curl --silent [http://$SERVICE_HOST/plain.txt](http://ad062fbbeb9dc40898eeebc8e51dff79-4a9fc623faba144f.elb.ap-south-1.amazonaws.com/plain.txt)
 ```
 
-[Image: image.png][Image: image.png]Open `$GITHUB_APP_REPO/kustomize/webserver-configmap.yaml` in a Cloud9 editor
-[Image: image.png]
+![README-5cc72487](images/README-5cc72487.png)
+
+![README-d9006011](images/README-d9006011.png)
+
+
+Open `$GITHUB_APP_REPO/kustomize/webserver-configmap.yaml` in a Cloud9 editor
+
+![README-66e28932](images/README-66e28932.png)
+
 Add a line to `plain.txt` key
 `Footnote: This is loaded from configMap`
 
 **Note:** Ensure that space used for indentation matches above text of the section. Else it may fail due to incorrect YAML syntax.
-[Image: image.png]
+
+![README-c404229a](images/README-c404229a.png)
+
 Save the change.
 Git commit and push to origin.
 
@@ -434,7 +484,9 @@ git push
 Switch to the other terminal tab where the watch on curl was set up. The footnote should appear as the source change is first reconciled and the kustomization is pushed out to the cluster.
 
 **Note:** Wait for up-to 60-90 seconds for Flux to pick these modifications and then eventually update the existing Kubernetes deployment.
-[Image: image.png]
+
+![README-9b0cd75b](images/README-9b0cd75b.png)
+
 ### Suspend Kustomization reconciliation
 
 Flux allows you to suspend reconciliation for either source or kustomization.
@@ -454,7 +506,9 @@ Checkout previous commit by noting the commit hash from `git log --oneline` outp
 git log --oneline
 ```
 
-[Image: image.png]Let’s try to revert to one of the previous commit “69d33a8”
+![README-dcc4b052](images/README-dcc4b052.png)
+
+Let’s try to revert to one of the previous commit “69d33a8”
 
 ```
 cd ~/environment/${GITHUB_APP_REPO}
@@ -464,7 +518,7 @@ git push
 ```
 
 **Expected Output:**
-[Image: image.png]
+![README-fe7f6482](images/README-fe7f6482.png)
 
 Note that `source` `Suspended` column shows `False` and gets reconciled.
 
@@ -550,7 +604,9 @@ Validate that kustomization resource is been deleted.
 `watch flux ``get`` kustomization $GITHUB_APP_REPO`
 ```
 
-[Image: Screenshot 2021-06-25 at 11.02.21 PM.png]Delete the `GitRepository` resource file at `./clusters/prod/$GITHUB_APP_REPO-source.yaml` from the `$GITHUB_INFRA_REPO` repository to remove the source configuration.
+![README-ae13a1a4](images/README-ae13a1a4.png)
+
+Delete the `GitRepository` resource file at `./clusters/prod/$GITHUB_APP_REPO-source.yaml` from the `$GITHUB_INFRA_REPO` repository to remove the source configuration.
 
 ```
 cd ~/environment/$GITHUB_INFRA_REPO
@@ -566,11 +622,16 @@ Now validate that git as source is been deleted from flux.
 watch flux get source git $GITHUB_APP_REPO
 ```
 
-[Image: Screenshot 2021-06-25 at 11.23.26 PM.png]**This completes the first part of the workshop.**
+![README-9e07b9d3](images/README-9e07b9d3.png)
+
+**This completes the first part of the workshop.**
 * * *
 * * *
 * * *
-Objective: This section of the workshop will configure scanning container image tags and deployment roll-outs with Flux.
+
+## Section 2
+
+This section of the workshop will configure scanning container image tags and deployment roll-outs with Flux.
 [Image: image.png]
 
 * scan the container registry and fetch the image tags
