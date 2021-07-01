@@ -4,6 +4,8 @@
 
 ## Section 1
 
+Complexity of this section : Intermediate (Level 200)
+
 We would like to familiarize you with the basics of  GitOps and demonstrate building a CD pipeline with EKS using the GitOps principles.  We will be using Flux v2 as a gitops operator, which runs in your EKS cluster and tracks changes to one or more Git repositories. These repositories store all manifests that define the desired state of your cluster, Flux will continuously and automatically reconcile the running state of the cluster with the state declared in code.
 
 ## Prerequisites
@@ -11,7 +13,7 @@ We would like to familiarize you with the basics of  GitOps and demonstrate buil
 We expect the following prerequisites from the participants:
 
 1. Familiarity with AWS and GIT
-2. Working knowledge of kubernetes/EKS
+2. Working knowledge of Kubernetes/EKS
 3. Familiarity with CI/CD concepts
 
 ## Some Theory first
@@ -137,10 +139,10 @@ Ensure you grant full control of private repositories.
 ### Configure GitHub SSH Key
 
 ```
-`export`` GITHUB_USER_EMAIL``=<``Email``>``  # Email configured in your GitHub profile.`
-`cd ``~/.``ssh`
-`ssh``-``keygen ``-``q ``-``N ``""`` ``-``C $GITHUB_USER_EMAIL ``-``f ``./``id_rsa`
-`ssh``-``keyscan github``.``com ``>`` ``./``known_hosts`
+export GITHUB_USER_EMAIL=<Email>  # Email configured in your GitHub profile.
+cd ~/.ssh
+ssh-keygen -q -N "" -C $GITHUB_USER_EMAIL -f ./id_rsa
+ssh-keyscan github.com > ./known_hosts
 ```
 
 Copy the contents of `~/.ssh/id_rsa.pub` and add new SSH key in your GitHub account settings.
@@ -160,11 +162,11 @@ Click on `New SSH key` button and add the new key.
 ![README-d7f358a2](images/README-d7f358a2.png)
 
 ```
-`export`` GITHUB_TOKEN``=``<``YOUR_GITHUB_TOKEN``>`
-`export`` GITHUB_USER``=<``YOUR_GITHUB_USERNAME``>`
+export GITHUB_TOKEN=<YOUR_GITHUB_TOKEN>
+export GITHUB_USER=<YOUR_GITHUB_USERNAME>
 export LOCAL_GIT_USERNAME=<Name>   # A friendly username to associate commits with an identity.
-`export`` GITHUB_INFRA_REPO``=``infra``     ``# This will be created if not present by the flux cli during the bootstrap process.`
-`export`` GITHUB_APP_REPO``=``gitops``-``demo ``# This is the main app repo that will be forked & cloned later in the workshop`**`.`**
+export GITHUB_INFRA_REPO=infra     # This will be created if not present by the flux cli during the bootstrap process.
+export GITHUB_APP_REPO=gitops-demo # This is the main app repo that will be forked & cloned later in the workshop*.*
 ```
 
 
@@ -179,7 +181,7 @@ git config --global credential.helper cache
 ### **Run the pre-requisite check**
 
 ```
-`flux check --pre`
+flux check --pre
 ```
 
 The flux project is evolving rapidly and you may find that the pre-check recommends a more recent version like below.
@@ -249,8 +251,8 @@ In the top-right corner of the page, click **`Fork`**.
 In the Cloud9 terminal change to the `environment` directory and run `git clone`
 
 ```
-`cd ~/environment`
-`git clone [git@github.com](mailto:git@github.com):$GITHUB_USER/${GITHUB_APP_REPO}.git`
+cd ~/environment
+git clone git@github.com:$GITHUB_USER/${GITHUB_APP_REPO}.git
 ```
 
 ### Create a `GitRepository` `source` using flux
@@ -314,9 +316,9 @@ The above command creates a `GitRepository` resource definition file pointing to
 Let’s get our new `GitRespository` definition we created locally pushed to the infra repo.
 
 ```
-`cd ``~``/environment/$GITHUB_INFRA_REPO`
-`git add ``-``A ``&&`` git ``commit ``-``m ``"Add $GITHUB_APP_REPO GitRepository"`` `
-`git push`
+cd ~/environment/$GITHUB_INFRA_REPO
+git add -A && git commit -m "Add $GITHUB_APP_REPO GitRepository"
+git push
 ```
 
 ### Check if the source is reconciled
@@ -337,16 +339,18 @@ gitops-demo     True    Fetched revision: main/69d33a8b41f56204352227eea56571f9f
 Confirm that an archive file with the latest commit hash is created by the `source-controller`.
 
 ```
-`kubectl exec -it \`
-`  `kubectl get pods -o json \`
-`  -l 'app=source-controller' \`
-`  -n flux-system \
-  -o jsonpath='{.items[0].metadata.name}'` \`
-`  -n flux-system -- \`
-`  ls -l /data/gitrepository/flux-system/gitops-demo`
+kubectl exec -it \
+  `kubectl get pods -o json \
+  -l 'app=source-controller' \
+  -n flux-system \
+  -o jsonpath='{.items[0].metadata.name}'` \
+  -n flux-system -- \
+  ls -l /data/gitrepository/flux-system/gitops-demo
 ```
 
-[Image: Screenshot 2021-06-25 at 9.05.05 PM.png]Now that we got our sources sync’ed let’s setup the deployment pipeline.
+![](images/README-7fa705cd.png)
+
+Now that we got our sources sync’ed let’s setup the deployment pipeline.
 
 ### Create `Kustomization` resource to deploy the `webserver` app
 
@@ -390,8 +394,7 @@ git push
 Note: wait for up-to a minute for “gitops-demo" kustomizations to be available.
 
 ```
-`watch flux get kustomizations
-`
+watch flux get kustomizations
 ```
 
 Expected Output:
@@ -577,31 +580,28 @@ On first glance it does seem like it has got the job done. However, do note that
 watch flux get kustomization $GITHUB_APP_REPO
 NAME        READY  MESSAGE                                                         REVISION                                      SUSPENDED
 gitops-demo True   Applied revision: main/0d3d79455ce0768f489d2cfbfe56c93078bca2c5 main/0d3d79455ce0768f489d2cfbfe56c93078bca2c5 False
-
-
 ```
 
 ```
 kubectl get deployment webserver
 NAME      READY UP-TO-DATE AVAILABLE AGE
 webserver 2/2   2          2         7m52s
-
 ```
 
 
 To ensure the `Kustomization` resource gets deleted permanently delete the `./clusters/prod/$GITHUB_APP_REPO-kustomization.yaml` file from the `$GITHUB_INFRA_REPO` repository.
 
 ```
-`cd ``~``/environment/``$GITHUB_INFRA_REPO`
-`git rm clusters``/``prod``/``$GITHUB_APP_REPO``-``kustomization``.``yaml`
-`git commit ``-``a ``-``m ``"Removing $GITHUB_APP_REPO Kustomization"`
-`git push   # May ask for username and password`
+cd ~/environment/$GITHUB_INFRA_REPO
+git rm clusters/prod/$GITHUB_APP_REPO-kustomization.yaml
+git commit -a -m "Removing $GITHUB_APP_REPO Kustomization"
+git push   # May ask for username and password
 ```
 
 Validate that kustomization resource is been deleted.
 
 ```
-`watch flux ``get`` kustomization $GITHUB_APP_REPO`
+watch flux get kustomization $GITHUB_APP_REPO
 ```
 
 ![README-ae13a1a4](images/README-ae13a1a4.png)
@@ -631,6 +631,8 @@ watch flux get source git $GITHUB_APP_REPO
 
 ## Section 2
 
+Complexity of this section : Advanced (Level 300)
+
 This section of the workshop will configure scanning container image tags and deployment roll-outs with Flux.
 
 ![README-d5ec740d](images/README-d5ec740d.png)
@@ -648,8 +650,8 @@ In the previous section we uninstalled the application by removing the source an
 We’ll first list the commit log and note down the commit IDs of the last two commits. Please note that the commit IDs in the log output will be different for your repository.
 
 ```
-`cd ~/environment/$GITHUB_INFRA_REPO
-`git log
+cd ~/environment/$GITHUB_INFRA_REPO
+git log
 ```
 
 ![README-1453e4e1](images/README-1453e4e1.png)
@@ -699,12 +701,12 @@ source setup-ecr-credentials-sync.sh GitOps-Workshop
 Note that the resource refers to `$ECR_SECRET_NAME` variable which is exported from the previous step. The `image-reflector-controller` uses the secret reference to login to the ECR repository.
 
 ```
-`cd ~/environment/$GITHUB_INFRA_REPO
-``flux create image repository $GITHUB_APP_REPO \`
-`--``image``=``$AWS_ACCOUNT_ID``.``dkr``.``ecr``.``$AWS_REGION``.``amazonaws``.``com``/``webserver \`
-`--``secret``-``ref``=``$ECR_SECRET_NAME \`
-`--``interval``=``30s`` \`
-`--``export`` ``>`` ``./``clusters``/``prod``/``$GITHUB_APP_REPO``-``repository``.``yaml`
+cd ~/environment/$GITHUB_INFRA_REPO
+flux create image repository $GITHUB_APP_REPO \
+--image=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/webserver \
+--secret-ref=$ECR_SECRET_NAME \
+--interval=30s \
+--export > ./clusters/prod/$GITHUB_APP_REPO-repository.yaml
 ```
 
 The arguments are self-explanatory. Go ahead and push the changes to `$GITHUB_INFRA_REPO`.
@@ -734,13 +736,12 @@ For regular expression based filtering, sorting can be either ascending or desce
 
 
 ```
-`flux create image policy `$GITHUB_APP_REPO \
-`--image-ref=`$GITHUB_APP_REPO` \`
-`--filter-regex='^main-[a-fA-F0-9]+-(?P<ts>[1-9][0-9]*)' \`
-`--filter-extract='$ts' \`
-`--select-numeric=asc \`
-`--export > ./clusters/prod/`$GITHUB_APP_REPO`-policy.yaml
-`
+flux create image policy $GITHUB_APP_REPO \
+--image-ref=$GITHUB_APP_REPO \
+--filter-regex='^main-[a-fA-F0-9]+-(?P<ts>[1-9][0-9]*)' \
+--filter-extract='$ts' \
+--select-numeric=asc \
+--export > ./clusters/prod/$GITHUB_APP_REPO-policy.yaml
 ```
 
 Now we have defined a policy to select the latest tag. Go ahead and push the changes to `$GITHUB_INFRA_REPO`.
@@ -795,9 +796,10 @@ EOF
 
 The `image-automation-controller` will checkout the source repo, locate all the manifest files based on  `update.path` field, commit the changes with commit message from the `messageTemplate` field and push the changes back to the source repo. The `messageTemplate` in the above resource definition will list down the updated image tags in the commit message. The `update.path` field restricts the updates to resources under the `./kustomize` directory only. The controller will update the manifest files at places where it finds placeholder comments like the following:
 
-* # {“$imagepolicy”: “flux-system:<source repo>”}
-* # {“$imagepolicy”: “flux-system:<source repo>:name”}
-* # {“$imagepolicy”: “flux-system:<source repo>:tag”}
+
+# {“$imagepolicy”: “flux-system:<source repo>”}
+# {“$imagepolicy”: “flux-system:<source repo>:name”}
+# {“$imagepolicy”: “flux-system:<source repo>:tag”}
 
 
 
@@ -883,22 +885,25 @@ Export GITHUB_APP_REPO environment variable in each of the new terminal windows 
 _**New terminal tab 1**_
 
 ```
-`export`` GITHUB_APP_REPO``=``gitops``-``demo
-`watch flux get image repository $GITHUB_APP_REPO
+#image repository
+export GITHUB_APP_REPO=gitops-demo
+watch flux get image repository $GITHUB_APP_REPO
 ```
 
 _**New terminal tab 2**_
 
 ```
-`export`` GITHUB_APP_REPO``=``gitops``-``demo
-`watch flux get image policy $GITHUB_APP_REPO
+#image policy
+export GITHUB_APP_REPO=gitops-demo
+watch flux get image policy $GITHUB_APP_REPO
 ```
 
 _**New terminal tab 3**_
 
 ```
-`export`` GITHUB_APP_REPO``=``gitops``-``demo
-`watch flux get image update $GITHUB_APP_REPO
+#image update
+export GITHUB_APP_REPO=gitops-demo
+watch flux get image update $GITHUB_APP_REPO
 ```
 
 ![README-b4b2ffd1](images/README-b4b2ffd1.png)
@@ -980,4 +985,5 @@ flux uninstall
 ![README-939f752b](images/README-939f752b.png)
 
 Congratulations! You have completed the workshop! 🎉
+
 Please fill in the Survey to share your experience about this workshop.
