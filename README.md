@@ -30,7 +30,7 @@
 **[Suspend Kustomization reconciliation](#suspend-kustomization-reconciliation)**<br>
 **[Resume Kustomization reconciliation](#resume-kustomization-reconciliation)**<br>
 **[Undeploy the application](#undeploy-the-application)**<br>
-**[Section 2: Image Reconciliation](#section-2:-image-reconciliation)**<br>
+**[Section 2: Image Reconciliation](#section-2-image-reconciliation)**<br>
 **[Revert the source and kustomization to redeploy the application](#revert-the-source-and-kustomization-to-redeploy-the-application)**<br>
 **[Setup cron job to synchronize ECR login token every 6 hours](#setup-cron-job-to-synchronize-ecr-login-token-every-6-hours)**<br>
 **[Create an `ImageRepository` resource pointing to our private ECR repo](#create-an-`imagerepository`-resource-pointing-to-our-private-ecr-repo)**<br>
