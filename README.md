@@ -12,12 +12,18 @@
 **[Building the Extension Bundles](#building-the-extension-bundles)**<br>
 **[Next Steps, Credits, Feedback, License](#next-steps)**<br>
 
-## Installation Instructions
+
 
 ## Table of Contents
-**[Section 1](##section-1)**<br>
-**[Prerequisites](##prerequisites)**<br>
-**[Some Theory first](##Some Theory first)**<br>
+**[Installation Instructions](#installation-instructions)**<br>
+**[Section 1](#section-1)**<br>
+**[Prerequisites](#prerequisites)**<br>
+**[Some Theory first](#some-theory-first)**<br>
+
+## Installation Instructions
+
+
+
 **[The Gitops principle](###The Gitops principle)**<br>
 **[Key Gitops benefits](###Key Gitops benefits)**<br>
 **[Some core concepts](###Some core concepts)**<br>
