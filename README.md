@@ -402,7 +402,7 @@ Expected Output:
 [Image: image.png]
 ### Check deployment
 
-![README-2f19cf2d](images/README-2f19cf2d.png)
+![](images/README-2f19cf2d.png)
 
 ```
 kubectl get deployment webserver
