@@ -632,7 +632,8 @@ watch flux get source git $GITHUB_APP_REPO
 ## Section 2
 
 This section of the workshop will configure scanning container image tags and deployment roll-outs with Flux.
-[Image: image.png]
+
+![README-d5ec740d](images/README-d5ec740d.png)
 
 * scan the container registry and fetch the image tags
 * select the latest tag based on the defined policy (semver, calver, regex)
@@ -651,26 +652,31 @@ We’ll first list the commit log and note down the commit IDs of the last two c
 `git log
 ```
 
-[Image: image.png]Next, we’ll use `git revert` to revert the changes one by one.
+![README-1453e4e1](images/README-1453e4e1.png)
+
+Next, we’ll use `git revert` to revert the changes one by one.
 
 ```
 # Replace with commit ID for your repo
 git revert --no-edit dc048c246424cda7dab97e9d42831b566c072e9d
 ```
+![README-775fc2db](images/README-775fc2db.png)
 
-[Image: Screenshot 2021-06-30 at 4.05.10 PM.png]
 ```
 # Replace with commit ID for your repo
 git revert --no-edit 8ca58fc9cdf46a5507c8073714642596bd4cea3d
 ```
 
-[Image: Screenshot 2021-06-30 at 4.06.25 PM.png]Checking `git log`  again should show two new commits to revert the earlier changes.
+![README-aa225fd3](images/README-aa225fd3.png)
+
+Checking `git log`  again should show two new commits to revert the earlier changes.
 
 ```
 git log
 ```
 
-[Image: image.png]
+![README-fe4598d5](images/README-fe4598d5.png)
+
 Push the reverted commits.
 
 ```
@@ -715,7 +721,10 @@ watch flux get image repository $GITHUB_APP_REPO
 ```
 
 **Note:** This may take up-to a minute to start reflecting in output
-[Image: Screenshot 2021-06-30 at 9.19.43 AM.png]Here it is showing as  `0 tags` since we still do not have any images been pushed to Amazon Elastic Container Registry.
+
+![README-c9a286d0](images/README-c9a286d0.png)
+
+Here it is showing as  `0 tags` since we still do not have any images been pushed to Amazon Elastic Container Registry.
 
 ### Create an `ImagePolicy` resource to filter, sort and select image tags from ECR repository
 
@@ -750,7 +759,7 @@ Verify the image policy resource. It will complain about empty version list. Thi
 watch flux get image policy $GITHUB_APP_REPO
 ```
 
-[Image: Screenshot 2021-06-30 at 10.26.15 AM.png]
+![README-3045dec2](images/README-3045dec2.png)
 
 ### Create an `ImageUpdateAutomation` resource to update the latest image tag in the deployment manifests
 
@@ -803,7 +812,8 @@ Verify the image update automation resource.
 watch flux get image update
 ```
 
-[Image: Screenshot 2021-06-30 at 9.25.19 AM.png]
+![README-fa420c8c](images/README-fa420c8c.png)
+
 ### Setup application assets to support image update automation
 
 Now that we have defined all the flux resources for image update automation we have to update the relevant manifest files in the source repo for the image updation to work.
@@ -821,39 +831,56 @@ git merge origin/image-automation
 ```
 
 Merge will open up commit editor. In the Cloud9 environment it will most probably be `nano`. Accept the changes and hit `^X` (`<Ctrl>+X`) to exit the editor.
-[Image: Screenshot 2021-06-30 at 12.55.54 PM.png]**Sample Output:**
-[Image: image.png]Once the merge is done push the changes to `origin`.
+
+![README-585ea2fe](images/README-585ea2fe.png)
+
+**Sample Output:**
+
+![README-c6db5d2e](images/README-c6db5d2e.png)
+
+Once the merge is done push the changes to `origin`.
 
 ```
 git push
 ```
 
 Placeholders in `./kustomize/kustomization.yaml` overlay file tell the `image-automation-controller` where and which part of the image reference to update.
-[Image: Screenshot 2021-06-28 at 7.57.59 PM.png]As soon as the ./kustomize/`kustomization.yaml` is reconciled in the cluster the deployment will break momentarily because of the `$AWS_ACCOUNT_ID` and `$AWS_REGION` variables in the `newName` field and also because we currently do not have any images in our repo. We’ll get to that shortly.
-[Image: Screenshot 2021-06-30 at 12.16.21 PM.png][Image: Screenshot 2021-06-30 at 10.07.39 AM.png]
+
+![README-64150c29](images/README-64150c29.png)
+
+As soon as the ./kustomize/`kustomization.yaml` is reconciled in the cluster the deployment will break momentarily because of the `$AWS_ACCOUNT_ID` and `$AWS_REGION` variables in the `newName` field and also because we currently do not have any images in our repo. We’ll get to that shortly.
+
+![README-fd38520c](images/README-fd38520c.png)
+
+![README-4b0d74dc](images/README-4b0d74dc.png)
+
 The Dockerfile in base directory is very simple. It copies the static assets and conf file to the `nginx` server locations and builds the image.
-[Image: Screenshot 2021-06-28 at 7.56.23 PM.png]
+
+![README-534b844a](images/README-534b844a.png)
+
 Now we’ll split the terminal pane into 4 rows to get simultaneous feedback from the image repository, policy and update automation resources.
 
 
 1. Right click on the terminal tab and select `Split Pane in Two Rows`.
 
-[Image: Screenshot 2021-06-30 at 11.01.46 AM.png]
+![README-7ea9ebaa](images/README-7ea9ebaa.png)
 
 
+2. Repeat step 1 by right clicking on the first pane two more times to have the below pane configuration.
 
-1. Repeat step 1 by right clicking on the first pane two more times to have the below pane configuration.
+![README-5a101b21](images/README-5a101b21.png)
 
-[Image: Screenshot 2021-06-30 at 11.07.01 AM.png]
-1. Open New Terminal windows in each of the new panes by clicking the `+` icon at the top left corner of each new pane and selecting New Terminal option.
+3. Open New Terminal windows in each of the new panes by clicking the `+` icon at the top left corner of each new pane and selecting New Terminal option.
 
-[Image: Screenshot 2021-06-30 at 11.14.50 AM.png]
+![README-cae7307d](images/README-cae7307d.png)
 
-1. Finally you should have four vertically stacked terminal windows.
+4. Finally you should have four vertically stacked terminal windows.
 
-[Image: image]Export GITHUB_APP_REPO environment variable in each of the new terminal windows and set three different watch commands on the new terminal windows.
+![README-6a70f460](images/README-6a70f460.png)
 
-_**New termina tab 1**_
+Export GITHUB_APP_REPO environment variable in each of the new terminal windows and set three different watch commands on the new terminal windows.
+
+_**New terminal tab 1**_
 
 ```
 `export`` GITHUB_APP_REPO``=``gitops``-``demo
@@ -874,8 +901,9 @@ _**New terminal tab 3**_
 `watch flux get image update $GITHUB_APP_REPO
 ```
 
+![README-b4b2ffd1](images/README-b4b2ffd1.png)
 
-[Image: Screenshot 2021-06-30 at 11.27.00 AM.png]Next, to keep the workshop simple we are going to build the image in our local Cloud9 environment and push to our private ECR repository.
+Next, to keep the workshop simple we are going to build the image in our local Cloud9 environment and push to our private ECR repository.
 
 In the original terminal tab execute the following commands.
 
@@ -894,21 +922,32 @@ cd ~/environment/$GITHUB_APP_REPO/scripts
 ```
 
 **Expected output:**
-Ensure that none of the environment varibales are blank.
-[Image: image]
+Ensure that none of the environment variables are blank.
+
+![README-b4a3c60d](images/README-b4a3c60d.png)
+
 The build script will create a new image tag and push it to the ECR repo. Watch the new tag getting reconciled and committed to the source repo in the below terminals.
 
 **Note:** You may have to wait for up-to a min for flux reconciliation to kick-in and start reflecting.
-[Image: Screenshot 2021-06-30 at 11.45.02 AM.png]Verify that the image tag is updated in the cluster deployment resource.
+
+![README-9a3c1048](images/README-9a3c1048.png)
+
+Verify that the image tag is updated in the cluster deployment resource.
 
 ```
 kubectl get deployment/webserver -o jsonpath='{.spec.template.spec.containers[0].image}'
 ```
 
-[Image: Screenshot 2021-06-30 at 11.57.00 AM.png]Verify that the pods are running fine.
-[Image: Screenshot 2021-06-30 at 12.35.56 PM.png]
+![README-345ffe72](images/README-345ffe72.png)
+
+Verify that the pods are running fine.
+
+![README-21b31d35](images/README-21b31d35.png)
+
 Verify that the change is indeed reflected in your GitHub repo. The branch as shown below will depend on the source repo push configuration for the `ImageUpdateAutomation` resource. For the workshop content the branch will be `main`.
-[Image: Screenshot 2021-06-30 at 12.03.45 PM.png]
+
+![README-ba99a836](images/README-ba99a836.png)
+
 * * *
 
 ### Clean up application resources
@@ -928,7 +967,8 @@ The changes should get reconciled back in the cluster within a minute. Wait for 
 kubectl get deployments
 ```
 
-[Image: Screenshot 2021-06-30 at 1.15.07 PM.png]
+![README-7ebc3604](images/README-7ebc3604.png)
+
 ### Uninstall flux
 
 As a final step, before we wrap this workshop, go ahead and remove all flux components from the cluster.
@@ -937,5 +977,7 @@ As a final step, before we wrap this workshop, go ahead and remove all flux comp
 flux uninstall
 ```
 
-[Image: Screenshot 2021-06-30 at 1.25.25 PM.png]Congratulations! You have completed the workshop! 🎉
+![README-939f752b](images/README-939f752b.png)
+
+Congratulations! You have completed the workshop! 🎉
 Please fill in the Survey to share your experience about this workshop.
