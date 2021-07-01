@@ -33,7 +33,7 @@
 **[Section 2: Image Reconciliation](#section-2-image-reconciliation)**<br>
 **[Revert the source and kustomization to redeploy the application](#revert-the-source-and-kustomization-to-redeploy-the-application)**<br>
 **[Setup cron job to synchronize ECR login token every 6 hours](#setup-cron-job-to-synchronize-ecr-login-token-every-6-hours)**<br>
-**[Create an `ImageRepository` resource pointing to our private ECR repo](#create-an-`imagerepository`-resource-pointing-to-our-private-ecr-repo)**<br>
+**[Create an ImageRepository resource pointing to our private ECR repo](#create-an-`imagerepository`-resource-pointing-to-our-private-ecr-repo)**<br>
 **[Clean up application resources](#clean-up-application-resources)**<br>
 **[Uninstall flux](#uninstall-flux)**<br>
 
