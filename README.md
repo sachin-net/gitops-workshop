@@ -80,7 +80,7 @@ Open Cloud9 IDE environment by clicking on the `EKSCloud9EnvUrl` link from the b
 
 The IDE window may display a modal asking if third party content may be displayed in a WebView pane in the IDE window. Click No to discard the prompt.
 
-![](images/README-36391605.png)
+![README-36391605](images/README-36391605.png)
 
 Next we’ll need some CLI tools to be installed in the Cloud9 environment for the workshop. For that we’ll first clone a public repository with the relevant installation scripts. Open the `**Source Control**` view as shown below and clone the [eks-init-scripts](https://github.com/iamsouravin/eks-init-scripts) repository.
 
@@ -108,7 +108,8 @@ cd ~/environment/eks-init-scripts
 source ./cli_tools.sh
 ```
 
-[Image: Screenshot 2021-06-27 at 12.06.12 PM.png]With the necessary tools installed next check if the cluster is accessible. List the nodes using **`kubectl get nodes`** to confirm the single worker node is **`Ready`**.
+![README-9ce3a539](images/README-9ce3a539.png)
+With the necessary tools installed next check if the cluster is accessible. List the nodes using **`kubectl get nodes`** to confirm the single worker node is **`Ready`**.
 
 ```
 kubectl get nodes
@@ -225,7 +226,7 @@ The `bootstrap` command creates the well-known `flux-system` directory at the co
 
 **Note:** Currently these files would be within “[https://github.com/$GITHUB_USER/${GITHUB_INFRA_REPO}.git](https://github.com/$GITHUB_USER/$%7BGITHUB_INFRA_REPO%7D.git)” and in one of the later steps, this would be cloned to your Cloud 9 instance.
 
-![](images/README-f368e6f1.png)
+![README-f368e6f1](images/README-f368e6f1.png)
 
 Later in the workshop we’ll create and commit the toolkit component manifests pointing to our application repository at the same path under `clusters/prod`.
 
@@ -348,7 +349,7 @@ kubectl exec -it \
   ls -l /data/gitrepository/flux-system/gitops-demo
 ```
 
-![](images/README-7fa705cd.png)
+![README-7fa705cd](images/README-7fa705cd.png)
 
 Now that we got our sources sync’ed let’s setup the deployment pipeline.
 
@@ -439,7 +440,7 @@ watch kubectl get deployment webserver
 
 ### Flux reconciles new git changes
 
-![](images/README-2f19cf2d.png)
+![README-2f19cf2d](images/README-2f19cf2d.png)
 
 Get the load balancer endpoint. The load balancer FQDN can be found  under EXTERNAL_IP column.
 
