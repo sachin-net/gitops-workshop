@@ -4,40 +4,40 @@
 
 
 ## Table of Contents
-**[Section 1](#section-1)**<br>
-          **[Prerequisites](#prerequisites)**<br>
-          **[Some Theory first](#some-theory-first)**<br>
-          **[The Gitops principle](##the-gitops-principle)**<br>
-          **[Key Gitops benefits](#key-gitops-benefits)**<br>
-          **[Some core concepts](#Some-core-concepts)**<br>
-          **[Workshop steps](#workshop-steps)**<br>
-          **[The workflow](#the-workflow)**<br>
-          **[Environment setup](#environment-setup)**<br>
-          **[Event Engine CloudFormation stack output](#event-engine-cloudformation-stack-output)**<br>
-          **[Default AWS Cloud9 IDE view](#default-aws-cloud9-ide-view)**<br>
-          **[Configure GitHub SSH Key](#configure-github-ssh-key)**<br>
-          **[Bootstrap flux tooling](#bootstrap-flux-tooling)**<br>
-          **[Verify flux is installed and running](#verify-flux-is-installed-and-running)**<br>
-          **[Fork application demo repository](#fork-application-demo-repository)**<br>
-          **[Clone the forked Github repo](#clone-the-forked-Github-repo)**<br>
-          **[Git commit and push](#git-commit-and-push)**<br>
-          **[Check if the source is reconciled](#check-if-the-source-is-reconciled)**<br>
-          **[Git commit and push](#git-commit-and-push)**<br>
-          **[Watch Flux sync the application](#watch-Flux-sync-the-application)**<br>
-          **[Check deployment](#check-deployment)**<br>
-          **[Flux reverts cluster changes](#flux-reverts-cluster-changes)**<br>
-          **[Flux reconciles new git changes](#flux-reconciles-new-git-changes)**<br>
-          **[Suspend Kustomization reconciliation](#suspend-kustomization-reconciliation)**<br>
-          **[Resume Kustomization reconciliation](#resume-kustomization-reconciliation)**<br>
-          **[Undeploy the application](#undeploy-the-application)**<br>
-**[Section 2](#section-2)**<br>
-  **[Revert the source and kustomization to redeploy the application](#revert-the-source-and-kustomization-to-redeploy-the-application)**<br>
-  **[Setup cron job to synchronize ECR login token every 6 hours](#setup-cron-job-to-synchronize-ecr-login-token-every-6-hours)**<br>
-  **[Create an `ImageRepository` resource pointing to our private ECR repo](#create-an-`imagerepository`-resource-pointing-to-our-private-ecr-repo)**<br>
-  **[Clean up application resources](#clean-up-application-resources)**<br>
-  **[Uninstall flux](#uninstall-flux)**<br>
+**[Section 1: Application Deployment](#section-1:-application-deployment)**<br>
+**[Prerequisites](#prerequisites)**<br>
+**[Some Theory first](#some-theory-first)**<br>
+**[The Gitops principle](##the-gitops-principle)**<br>
+**[Key Gitops benefits](#key-gitops-benefits)**<br>
+**[Some core concepts](#Some-core-concepts)**<br>
+**[Workshop steps](#workshop-steps)**<br>
+**[The workflow](#the-workflow)**<br>
+**[Environment setup](#environment-setup)**<br>
+**[Event Engine CloudFormation stack output](#event-engine-cloudformation-stack-output)**<br>
+**[Default AWS Cloud9 IDE view](#default-aws-cloud9-ide-view)**<br>
+**[Configure GitHub SSH Key](#configure-github-ssh-key)**<br>
+**[Bootstrap flux tooling](#bootstrap-flux-tooling)**<br>
+**[Verify flux is installed and running](#verify-flux-is-installed-and-running)**<br>
+**[Fork application demo repository](#fork-application-demo-repository)**<br>
+**[Clone the forked Github repo](#clone-the-forked-Github-repo)**<br>
+**[Git commit and push](#git-commit-and-push)**<br>
+**[Check if the source is reconciled](#check-if-the-source-is-reconciled)**<br>
+**[Git commit and push](#git-commit-and-push)**<br>
+**[Watch Flux sync the application](#watch-Flux-sync-the-application)**<br>
+**[Check deployment](#check-deployment)**<br>
+**[Flux reverts cluster changes](#flux-reverts-cluster-changes)**<br>
+**[Flux reconciles new git changes](#flux-reconciles-new-git-changes)**<br>
+**[Suspend Kustomization reconciliation](#suspend-kustomization-reconciliation)**<br>
+**[Resume Kustomization reconciliation](#resume-kustomization-reconciliation)**<br>
+**[Undeploy the application](#undeploy-the-application)**<br>
+**[Section 2](#section-2:-image-reconciliation)**<br>
+**[Revert the source and kustomization to redeploy the application](#revert-the-source-and-kustomization-to-redeploy-the-application)**<br>
+**[Setup cron job to synchronize ECR login token every 6 hours](#setup-cron-job-to-synchronize-ecr-login-token-every-6-hours)**<br>
+**[Create an `ImageRepository` resource pointing to our private ECR repo](#create-an-`imagerepository`-resource-pointing-to-our-private-ecr-repo)**<br>
+**[Clean up application resources](#clean-up-application-resources)**<br>
+**[Uninstall flux](#uninstall-flux)**<br>
 
-## Section 1
+## Section 1: Application Deployment
 
 **Complexity of this section** : Intermediate (Level 200)
 
@@ -665,7 +665,7 @@ watch flux get source git $GITHUB_APP_REPO
 * * *
 * * *
 
-## Section 2
+## Section 2: Image Reconciliation
 
 **Complexity of this section** : Advanced (Level 300)
 
