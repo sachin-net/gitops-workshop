@@ -3,56 +3,49 @@
 # GitOps workshop for India summit 2021
 
 
-### Table of Contents
+<!-- ### Table of Contents
 **[Installation Instructions](#installation-instructions)**<br>
 **[Usage Instructions](#usage-instructions)**<br>
 **[Troubleshooting](#troubleshooting)**<br>
 **[Compatibility](#compatibility)**<br>
 **[Notes and Miscellaneous](#notes-and-miscellaneous)**<br>
 **[Building the Extension Bundles](#building-the-extension-bundles)**<br>
-**[Next Steps, Credits, Feedback, License](#next-steps)**<br>
-
-
+**[Next Steps, Credits, Feedback, License](#next-steps)**<br> -->
 
 ## Table of Contents
 **[Installation Instructions](#installation-instructions)**<br>
 **[Section 1](#section-1)**<br>
 **[Prerequisites](#prerequisites)**<br>
 **[Some Theory first](#some-theory-first)**<br>
-
-## Installation Instructions
-
-
-
-**[The Gitops principle](###The Gitops principle)**<br>
-**[Key Gitops benefits](###Key Gitops benefits)**<br>
-**[Some core concepts](###Some core concepts)**<br>
-**[Workshop steps](##Workshop steps)**<br>
-**[The workflow](###The workflow)**<br>
-**[Environment setup](###Environment setup)**<br>
-**[Event Engine CloudFormation stack output](###Event Engine CloudFormation stack output)**<br>
-**[Default AWS Cloud9 IDE view](###Default AWS Cloud9 IDE view)**<br>
-**[Configure GitHub SSH Key](###Configure GitHub SSH Key)**<br>
-**[Bootstrap flux tooling](###Bootstrap flux tooling)**<br>
-**[Verify flux is installed and running](###Verify flux is installed and running)**<br>
-**[Fork application demo repository](###Fork application demo repository)**<br>
-**[Clone the forked Github repo](###Clone the forked Github repo)**<br>
-**[Git commit and push](###Git commit and push)**<br>
-**[Check if the source is reconciled](###Check if the source is reconciled)**<br>
-**[Git commit and push](###Git commit and push)**<br>
-**[Watch Flux sync the application](###Watch Flux sync the application)**<br>
-**[Check deployment](###Check deployment)**<br>
-**[Flux reverts cluster changes](###Flux reverts cluster changes)**<br>
-**[Flux reconciles new git changes](###Flux reconciles new git changes)**<br>
-**[Suspend Kustomization reconciliation](###Suspend Kustomization reconciliation)**<br>
-**[Resume Kustomization reconciliation](###Resume Kustomization reconciliation)**<br>
-**[Undeploy the application](###Undeploy the application)**<br>
-**[Section 2](##Section 2)**<br>
-**[Revert the source and kustomization to redeploy the application](###Revert the source and kustomization to redeploy the application)**<br>
-**[Setup cron job to synchronize ECR login token every 6 hours](###Setup cron job to synchronize ECR login token every 6 hours)**<br>
-**[Create an `ImageRepository` resource pointing to our private ECR repo](###Create an `ImageRepository` resource pointing to our private ECR repo)**<br>
-**[Clean up application resources](###Clean up application resources)**<br>
-**[Uninstall flux](###Uninstall flux)**<br>
+**[The Gitops principle](#The Gitops principle)**<br>
+**[Key Gitops benefits](#Key Gitops benefits)**<br>
+**[Some core concepts](#Some core concepts)**<br>
+**[Workshop steps](#Workshop steps)**<br>
+**[The workflow](#The workflow)**<br>
+**[Environment setup](#Environment setup)**<br>
+**[Event Engine CloudFormation stack output](#Event Engine CloudFormation stack output)**<br>
+**[Default AWS Cloud9 IDE view](#Default AWS Cloud9 IDE view)**<br>
+**[Configure GitHub SSH Key](#Configure GitHub SSH Key)**<br>
+**[Bootstrap flux tooling](#Bootstrap flux tooling)**<br>
+**[Verify flux is installed and running](#Verify flux is installed and running)**<br>
+**[Fork application demo repository](#Fork application demo repository)**<br>
+**[Clone the forked Github repo](#Clone the forked Github repo)**<br>
+**[Git commit and push](#Git commit and push)**<br>
+**[Check if the source is reconciled](#Check if the source is reconciled)**<br>
+**[Git commit and push](#Git commit and push)**<br>
+**[Watch Flux sync the application](#Watch Flux sync the application)**<br>
+**[Check deployment](#Check deployment)**<br>
+**[Flux reverts cluster changes](#Flux reverts cluster changes)**<br>
+**[Flux reconciles new git changes](#Flux reconciles new git changes)**<br>
+**[Suspend Kustomization reconciliation](#Suspend Kustomization reconciliation)**<br>
+**[Resume Kustomization reconciliation](#Resume Kustomization reconciliation)**<br>
+**[Undeploy the application](#Undeploy the application)**<br>
+**[Section 2](#Section 2)**<br>
+**[Revert the source and kustomization to redeploy the application](#Revert the source and kustomization to redeploy the application)**<br>
+**[Setup cron job to synchronize ECR login token every 6 hours](#Setup cron job to synchronize ECR login token every 6 hours)**<br>
+**[Create an `ImageRepository` resource pointing to our private ECR repo](#Create an `ImageRepository` resource pointing to our private ECR repo)**<br>
+**[Clean up application resources](#Clean up application resources)**<br>
+**[Uninstall flux](#Uninstall flux)**<br>
 
 ## Section 1
 
