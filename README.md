@@ -399,7 +399,7 @@ watch flux get kustomizations
 ```
 
 Expected Output:
-[Image: image.png]
+![](images/README-c5f256cc.png)
 ### Check deployment
 
 ![](images/README-2f19cf2d.png)
