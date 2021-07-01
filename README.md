@@ -1,9 +1,7 @@
-
-
 # GitOps workshop for India summit 2021
 
-
 ## Table of Contents
+
 **[Section 1: Application Deployment](#section-1-application-deployment)**<br>
 **[Prerequisites](#prerequisites)**<br>
 **[Some Theory first](#some-theory-first)**<br>
@@ -42,7 +40,7 @@
 **Complexity of this section** : Intermediate (Level 200)
 **Time Required** : 40 mins
 
-We would like to familiarize you with the basics of  GitOps and demonstrate building a CD pipeline with EKS using the GitOps principles.  We will be using Flux v2 as a gitops operator, which runs in your EKS cluster and tracks changes to one or more Git repositories. These repositories store all manifests that define the desired state of your cluster, Flux will continuously and automatically reconcile the running state of the cluster with the state declared in code.
+We would like to familiarize you with the basics of GitOps and demonstrate building a CD pipeline with EKS using the GitOps principles. We will be using Flux v2 as a gitops operator, which runs in your EKS cluster and tracks changes to one or more Git repositories. These repositories store all manifests that define the desired state of your cluster, Flux will continuously and automatically reconcile the running state of the cluster with the state declared in code.
 
 ## Prerequisites
 
@@ -54,39 +52,38 @@ We expect the following prerequisites from the participants:
 
 ## Some Theory first
 
- GitOps is a fast and secure method for developers to manage and update complex applications and infrastructure running in Kubernetes.  It is an operations and application deployment workflow and a set of best practices for managing both infrastructure and deployments for cloud-native applications.
+GitOps is a fast and secure method for developers to manage and update complex applications and infrastructure running in Kubernetes. It is an operations and application deployment workflow and a set of best practices for managing both infrastructure and deployments for cloud-native applications.
 
 ### The Gitops principle
 
-1. **Your entire system described declaratively** :  With your entire system’s declarative configuration under source control, you have a single source of truth of your system’s desired state, providing a number of benefits like the ability to simultaneously manage infrastructure and application code.
+1. **Your entire system described declaratively** : With your entire system’s declarative configuration under source control, you have a single source of truth of your system’s desired state, providing a number of benefits like the ability to simultaneously manage infrastructure and application code.
 2. **A desired system state version controlled in Git :** With the declarative definitions of your system stored in Git, and serving as your canonical source of truth, there is a single place from which your cluster can be managed. This also trivializes rollbacks and roll forwards to take you back to a ‘good state’ if needed.
 3. **The ability for changes to be automatically applied:** Once the desired system state is kept in Git, the next step is the ability to automatically reconcile changes with your system.
 4. **Software agents that verify correct system state and alert on divergence :** With the desired state of your entire system kept under version control, and running in the cluster, you can now employ software controllers to bring the actual state of the cluster in alignment with that desired state, and inform you whenever reality doesn’t match your expectations.
 
 ### Key Gitops benefits
 
-* **Stronger security guarantees**
-* **Increased speed and productivity**
-* **Reduced mean time to detect and mean time to recovery**
-* **Improved stability and reliability**
-* **Easier compliance and auditing**
+- **Stronger security guarantees**
+- **Increased speed and productivity**
+- **Reduced mean time to detect and mean time to recovery**
+- **Improved stability and reliability**
+- **Easier compliance and auditing**
 
- GitOps implements a Kubernetes reconciler like [Flux](https://fluxcd.io/) that listens for and synchronizes deployments to your Kubernetes cluster.
- The Flux controllers together with a set of custom Kubernetes resources act on behalf of the cluster. It listens to events relating to custom resource changes, and then applies those changes (depending on the deployment policy) or it can send an alert indicating a divergence from the desired state kept in Git.
+GitOps implements a Kubernetes reconciler like [Flux](https://fluxcd.io/) that listens for and synchronizes deployments to your Kubernetes cluster.
+The Flux controllers together with a set of custom Kubernetes resources act on behalf of the cluster. It listens to events relating to custom resource changes, and then applies those changes (depending on the deployment policy) or it can send an alert indicating a divergence from the desired state kept in Git.
 
 ### Some core concepts
 
-**Sources :** A *Source* defines the origin of a repository containing the desired state of the system and the requirements to obtain it (e.g. credentials, version selectors).  Sources produce an artifact that is consumed by other Flux components to perform actions, like applying the contents of the artifact on the cluster. A source may be shared by multiple consumers to deduplicate configuration and/or storage.
+**Sources :** A _Source_ defines the origin of a repository containing the desired state of the system and the requirements to obtain it (e.g. credentials, version selectors). Sources produce an artifact that is consumed by other Flux components to perform actions, like applying the contents of the artifact on the cluster. A source may be shared by multiple consumers to deduplicate configuration and/or storage.
 
-**Reconciliation** :  Reconciliation refers to ensuring that a given state (e.g. application running in the cluster, infrastructure) matches a desired state declaratively defined somewhere (e.g. a Git repository).
- There are various examples of these in Flux:
+**Reconciliation** : Reconciliation refers to ensuring that a given state (e.g. application running in the cluster, infrastructure) matches a desired state declaratively defined somewhere (e.g. a Git repository).
+There are various examples of these in Flux:
 
 _HelmRelease reconciliation_: ensures the state of the Helm release matches what is defined in the resource, performs a release if this is not the case (including revision changes of a HelmChart resource).
 _Bucket reconciliation_: downloads and archives the contents of the declared bucket on a given interval and stores this as an artifact, records the observed revision of the artifact and the artifact itself in the status of resource.
 _Kustomization reconciliation_: ensures the state of the application deployed on a cluster matches the resources defined in a Git repository or S3 bucket.
 
-**Kustomization** :  The `Kustomization` custom resource represents a local set of Kubernetes resources (e.g. kustomize overlay) that Flux is supposed to reconcile in the cluster. The reconciliation runs every one minute by default, but this can be changed with `.spec.interval`. If you make any changes to the cluster using `kubectl edit/patch/delete`, they will be promptly reverted. You either suspend the reconciliation or push your changes to a Git repository.
-
+**Kustomization** : The `Kustomization` custom resource represents a local set of Kubernetes resources (e.g. kustomize overlay) that Flux is supposed to reconcile in the cluster. The reconciliation runs every one minute by default, but this can be changed with `.spec.interval`. If you make any changes to the cluster using `kubectl edit/patch/delete`, they will be promptly reverted. You either suspend the reconciliation or push your changes to a Git repository.
 
 ![README-e564548b](images/README-e564548b.png)
 
@@ -120,12 +117,11 @@ The IDE window may display a modal asking if third party content may be displaye
 
 Next we’ll need some CLI tools to be installed in the Cloud9 environment for the workshop. For that we’ll first clone a public repository with the relevant installation scripts. Open the `Source Control` view as shown below and clone the [eks-init-scripts](https://github.com/iamsouravin/eks-init-scripts) repository.
 
-![README-c0275afc](images/README-c0275afc.png)
-
-***Note:*** *The GitHub repo for init scripts can be found here:* [*https://github.com/iamsouravin/eks-init-scripts*](https://github.com/iamsouravin/eks-init-scripts)
-
-
 ![README-17a9a604](images/README-17a9a604.png)
+
+**_Note:_** _The GitHub repo for init scripts can be found here:_ [_https://github.com/iamsouravin/eks-init-scripts_](https://github.com/iamsouravin/eks-init-scripts)
+
+![README-c0275afc](images/README-c0275afc.png)
 
 Confirm the clone location.
 ![README-166491df](images/README-166491df.png)
@@ -135,7 +131,6 @@ Source Control view should show the cloned repository in the left pane.
 
 The environment directory should reflect the below structure.
 ![README-69a27d20](images/README-69a27d20.png)
-
 
 Open either a new terminal tab or access the existing tab and execute the `cli_tools.sh` shell script inside the cloned `eks-init-scripts` directory. The script installs tools like `jq`, `gettext`, `aws cli v2`, `kubectl`, `eksctl`, `helm` and `flux` binaries. It also exports the environment variables `AWS_ACCOUNT_ID`, `AWS_REGION` and `AWS_DEFAULT_REGION`. The script finishes off by adding a kubeconfig context of the EKS cluster where we’ll deploy flux components and application workloads.
 
@@ -155,21 +150,22 @@ ip-192-168-156-212.ap-southeast-1.compute.internal   Ready    <none>   112s   v1
 
 _**Setup the git environment**_
 
-For the first part of the workshop we’ll use two GitHub repositories:
-1) the app repository
-2) the infra repository.
+For the workshop we’ll use two GitHub repositories:
+
+1. the app repository
+2. the infra repository.
 
 The app repository will host the application source code along with any build and deployment artifacts like Dockerfile and Kubernetes manifests. This repository will be typically maintained by the application team whereas the second repository is maintained by the infrastructure team. The infra repository will contain the `flux` related artifacts.
 
 Refer to below links and setup the following:
 
-* [GitHub -- Personal access token](https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line)[](https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line): For PAT
+- [GitHub -- Personal access token](https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line)[](https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line): For PAT
 
 Ensure you grant full control of private repositories.
 
 ![README-9e763ee1](images/README-9e763ee1.png)
 
-* [GitHub -- Setting your username](https://help.github.com/en/github/using-git/setting-your-username-in-git) : Setting the GitHub username
+- [GitHub -- Setting your username](https://help.github.com/en/github/using-git/setting-your-username-in-git) : Setting the GitHub username
 
 **Note:** The Git username is not the same as your GitHub username.
 
@@ -205,7 +201,6 @@ export LOCAL_GIT_USERNAME=<Name>   # A friendly username to associate commits wi
 export GITHUB_INFRA_REPO=infra     # This will be created if not present by the flux cli during the bootstrap process.
 export GITHUB_APP_REPO=gitops-demo # This is the main app repo that will be forked & cloned later in the workshop.
 ```
-
 
 _**Setup git CLI**_
 
@@ -247,20 +242,20 @@ The `bootstrap` command sets up the GitHub repository that will host the GitOps 
 
 The table below explains the parameters to the `bootstrap` command.
 
-|Name	|Description	|Default Value	|Supplied Value	|
-|---	|---	|---	|---	|
-|`--components-extra`	|List of additional controllers to install. Accepts a comma separated list.	|	|`image-reflector-controller,image-automation-controller`	|
-|`--owner`	|Owner of the new GitHub repository.	|	|`$GITHUB_USER`	|
-|`--repository`	|Name of the new GitHub repository.	|	|`$GITHUB_INFRA_REPO`	|
-|`--branch`	|Default branch of the new GitHub repository.	|`main`	|`main`	|
-|`--path`	|Path relative to the repository root. The cluster sync will be scoped to this path	|	|`./clusters/prod`	|
-|`--personal`	|If set, the owner is assumed to be a GitHub user.	|Not set. Owner is assumed to be a GitHub org	|	|
-|`--version`	|Flux toolkit version to install in the cluster.	|`latest`	|`0.9.0`	|
-|	|	|	|	|
+| Name                 | Description                                                                        | Default Value                                | Supplied Value                                           |
+| -------------------- | ---------------------------------------------------------------------------------- | -------------------------------------------- | -------------------------------------------------------- |
+| `--components-extra` | List of additional controllers to install. Accepts a comma separated list.         |                                              | `image-reflector-controller,image-automation-controller` |
+| `--owner`            | Owner of the new GitHub repository.                                                |                                              | `$GITHUB_USER`                                           |
+| `--repository`       | Name of the new GitHub repository.                                                 |                                              | `$GITHUB_INFRA_REPO`                                     |
+| `--branch`           | Default branch of the new GitHub repository.                                       | `main`                                       | `main`                                                   |
+| `--path`             | Path relative to the repository root. The cluster sync will be scoped to this path |                                              | `./clusters/prod`                                        |
+| `--personal`         | If set, the owner is assumed to be a GitHub user.                                  | Not set. Owner is assumed to be a GitHub org |                                                          |
+| `--version`          | Flux toolkit version to install in the cluster.                                    | `latest`                                     | `0.9.0`                                                  |
+|                      |                                                                                    |                                              |                                                          |
 
 The `bootstrap` command creates the well-known `flux-system` directory at the configured path to host the flux internal components. The contents of the directory should resemble the following.
 
-**Note:** Currently these files would be within “[https://github.com/$GITHUB_USER/${GITHUB_INFRA_REPO}.git](https://github.com/$GITHUB_USER/$%7BGITHUB_INFRA_REPO%7D.git)” and in one of the later steps, this would be cloned to your Cloud 9 instance.
+**Note:** Currently these files would be within `https://github.com/$GITHUB_USER/${GITHUB_INFRA_REPO}.git` and in one of the later steps, this would be cloned to your Cloud 9 instance.
 
 ![README-f368e6f1](images/README-f368e6f1.png)
 
@@ -313,7 +308,6 @@ cd ~/environment
 git clone https://github.com/$GITHUB_USER/${GITHUB_INFRA_REPO}.git
 ```
 
-
 [**Optional**] Alternate option if above step asks for username and password.
 
 ```
@@ -322,8 +316,6 @@ Cloning into 'infra'...
 Username for 'https://github.com/xxxxx/xxxx.git': <username>
 Password for 'https://$GITHUB_USER@github.com/xxxxx/xxxx.git':<Personal access token>
 ```
-
-
 
 ```
 #Switch to $GITHUB_INFRA_REPO directory
@@ -340,13 +332,13 @@ flux create source git $GITHUB_APP_REPO \
 
 The above command creates a `GitRepository` resource definition file pointing to our app GitHub repository and branch. The source will get synchronized every 30 seconds. The table below explains the parameters to the `flux create source git` command.
 
-|Name	|Description	|Default Value	|Supplied Value	|
-|---	|---	|---	|---	|
-|`--url`	|Source repository URL.	|	|https://github.com/$GITHUB_USER/$GITHUB_APP_REPO	|
-|`--branch`	|Source repository branch to reconcile.	|master	|main	|
-|`--interval`	|Source repository sync interval.	|1m 0s	|30s	|
-|`--export`	|Export the configuration in YAML format to stdout.	|	|	|
-|	|	|	|	|
+| Name         | Description                                        | Default Value | Supplied Value                                     |
+| ------------ | -------------------------------------------------- | ------------- | -------------------------------------------------- |
+| `--url`      | Source repository URL.                             |               | `https://github.com/$GITHUB_USER/$GITHUB_APP_REPO` |
+| `--branch`   | Source repository branch to reconcile.             | `master`      | `main`                                             |
+| `--interval` | Source repository sync interval.                   | `1m0s`        | `30s`                                              |
+| `--export`   | Export the configuration in YAML format to stdout. |               |                                                    |
+|              |                                                    |               |                                                    |
 
 ### Git commit and push
 
@@ -369,7 +361,7 @@ watch flux get source git
 
 #Expected output
 NAME            READY   MESSAGE                                                         REVISION                                        SUSPENDED
-flux-system     True    Fetched revision: main/554ce6638ad7ec9c466818182ccbecd09fcb0923 main/554ce6638ad7ec9c466818182ccbecd09fcb0923   False    
+flux-system     True    Fetched revision: main/554ce6638ad7ec9c466818182ccbecd09fcb0923 main/554ce6638ad7ec9c466818182ccbecd09fcb0923   False
 gitops-demo     True    Fetched revision: main/69d33a8b41f56204352227eea56571f9fd4f96da main/69d33a8b41f56204352227eea56571f9fd4f96da   False
 ```
 
@@ -391,8 +383,6 @@ Now that we got our sources sync’ed let’s setup the deployment pipeline.
 
 ### Create `Kustomization` resource to deploy the `webserver` app
 
-![README-77f9756a](images/README-77f9756a.png)
-
 ![README-c9011b3a](images/README-c9011b3a.png)
 
 The `kustomize-controller` is another Kubernetes operator that gets installed in the cluster as part of the bootstrap process. It works with a `Kustomization` CRD. The `Kustomization` CRD points to Kubernetes manifest source artifact locations that are synced by the `source-controller`. The `kustomize-controller` assembles the manifests with [Kustomize](https://kustomize.io/) to form a continuous delivery pipeline. The controller is responsible for reconciling the cluster state with the source state as received from the `source-controller`. Pruning ensures any resources removed in the source also gets removed from the cluster. Client validation ensures that all the manifests are first validated by doing a dry-run apply. The controller also keeps track of the health of the deployed workloads and reflects it in the reconciliation status.
@@ -410,14 +400,14 @@ flux create kustomization $GITHUB_APP_REPO \
 
 The above command creates a `Kustomization` resource definition file pointing to the source path of the deployment manifests sync’ed by the `source-controller`. The manifests will get synchronised every 1 minute. The table below explains the parameters to the `flux create kustomization` command.
 
-|Name	|Description	|Default Value	|Supplied Value	|
-|---	|---	|---	|---	|
-|`--source`	|Source that contains the Kubernetes manifests.	|	|$GITHUB_APP_REPO	|
-|`--path`	|Path to the directory containing `kustomization.yaml`.	|./	|./kustomize	|
-|`--prune`	|Enable garbage collection.	|	|	|
-|`--validation`	|Validate manifests before applying.	|	|client	|
-|`--interval`	|Source sync interval	|1m0s	|1m	|
-|`--export`	|Export the configuration in YAML format to stdout.	|	|	|
+| Name           | Description                                            | Default Value | Supplied Value     |
+| -------------- | ------------------------------------------------------ | ------------- | ------------------ |
+| `--source`     | Source that contains the Kubernetes manifests.         |               | `$GITHUB_APP_REPO` |
+| `--path`       | Path to the directory containing `kustomization.yaml`. | `./`          | `./kustomize`      |
+| `--prune`      | Enable garbage collection.                             |               |                    |
+| `--validation` | Validate manifests before applying.                    |               | client             |
+| `--interval`   | Source sync interval                                   | `1m0s`        | `1m`               |
+| `--export`     | Export the configuration in YAML format to stdout.     |               |                    |
 
 ### Git commit and push
 
@@ -436,6 +426,7 @@ watch flux get kustomizations
 
 Expected Output:
 ![](images/README-c5f256cc.png)
+
 ### Check deployment
 
 ![](images/README-2f19cf2d.png)
@@ -449,7 +440,7 @@ webserver   2/2     2            2           6h2m
 
 ### Flux reverts cluster changes
 
-Flux `kustomiz-controller` tracks the values defined in the Kubernetes manifests in the app repo and continuously reconciles the cluster state to match the intents defined in the manifests. In our current deployment manifest we have set the replica count to 2.
+Flux `kustomize-controller` tracks the values defined in the Kubernetes manifests in the app repo and continuously reconciles the cluster state to match the intents defined in the manifests. In our current deployment manifest we have set the replica count to 2.
 
 ![README-3d529ea6](images/README-3d529ea6.png)
 
@@ -473,12 +464,11 @@ watch kubectl get deployment webserver
 
 ![README-0ebf19ab](images/README-0ebf19ab.png)
 
-
 ### Flux reconciles new git changes
 
 ![README-2f19cf2d](images/README-2f19cf2d.png)
 
-Get the load balancer endpoint. The load balancer FQDN can be found  under EXTERNAL_IP column.
+Get the load balancer endpoint. The load balancer FQDN can be found under EXTERNAL_IP column.
 
 ```
 kubectl get service webserver
@@ -499,7 +489,6 @@ watch curl --silent [http://$SERVICE_HOST/plain.txt](http://ad062fbbeb9dc40898ee
 ![README-5cc72487](images/README-5cc72487.png)
 
 ![README-d9006011](images/README-d9006011.png)
-
 
 Open `$GITHUB_APP_REPO/kustomize/webserver-configmap.yaml` in a Cloud9 editor
 
@@ -531,8 +520,8 @@ Switch to the other terminal tab where the watch on curl was set up. The footnot
 
 Flux allows you to suspend reconciliation for either source or kustomization.
 
-* Suspending source will prevent any new kustomization changes to be reconciled from source.
-* However, suspending only kustomization will not suspend source reconciliation.
+- Suspending source will prevent any new kustomization changes to be reconciled from source.
+- However, suspending only kustomization will not suspend source reconciliation.
 
 ```
 flux suspend kustomization $GITHUB_APP_REPO
@@ -596,8 +585,8 @@ Terminate the watch on curl that we had set in another terminal. Now we’re goi
 Let’s see if we can simply delete the `Kustomization` custom resource to undeploy the application.
 
 ```
-flux delete kustomization $GITHUB_APP_REPO  
-#expected output                                                                                                                    
+flux delete kustomization $GITHUB_APP_REPO
+#expected output
 Are you sure you want to delete this kustomizations: y█
 ► deleting kustomizations gitops-demo in flux-system namespace
 ✔ kustomizations deleted
@@ -625,7 +614,6 @@ NAME      READY UP-TO-DATE AVAILABLE AGE
 webserver 2/2   2          2         7m52s
 ```
 
-
 To ensure the `Kustomization` resource gets deleted permanently delete the `./clusters/prod/$GITHUB_APP_REPO-kustomization.yaml` file from the `$GITHUB_INFRA_REPO` repository.
 
 ```
@@ -635,7 +623,7 @@ git commit -a -m "Removing $GITHUB_APP_REPO Kustomization"
 git push   # May ask for username and password
 ```
 
-Validate that kustomization resource is been deleted.
+Validate that kustomization resource has been deleted.
 
 ```
 watch flux get kustomization $GITHUB_APP_REPO
@@ -652,7 +640,7 @@ git commit -a -m "Removing $GITHUB_APP_REPO GitRepository"
 git push
 ```
 
-Now validate that git as source is been deleted from flux.
+Now validate that git as source has been deleted from flux.
 
 ```
 
@@ -662,9 +650,12 @@ watch flux get source git $GITHUB_APP_REPO
 ![README-9e07b9d3](images/README-9e07b9d3.png)
 
 **This completes the first part of the workshop.**
-* * *
-* * *
-* * *
+
+---
+
+---
+
+---
 
 ## Section 2: Image Reconciliation
 
@@ -675,11 +666,11 @@ This section of the workshop will configure scanning container image tags and de
 
 ![README-d5ec740d](images/README-d5ec740d.png)
 
-* scan the container registry and fetch the image tags
-* select the latest tag based on the defined policy (semver, calver, regex)
-* replace the tag in Kubernetes manifests (YAML format)
-* checkout a branch, commit and push the changes to the remote Git repository
-* apply the changes in-cluster and rollout the container image
+- scan the container registry and fetch the image tags
+- select the latest tag based on the defined policy (semver, calver, regex)
+- replace the tag in Kubernetes manifests (YAML format)
+- checkout a branch, commit and push the changes to the remote Git repository
+- apply the changes in-cluster and rollout the container image
 
 ### Revert the source and kustomization to redeploy the application
 
@@ -700,6 +691,7 @@ Next, we’ll use `git revert` to revert the changes one by one.
 # Replace with commit ID for your repo
 git revert --no-edit dc048c246424cda7dab97e9d42831b566c072e9d
 ```
+
 ![README-775fc2db](images/README-775fc2db.png)
 
 ```
@@ -709,7 +701,7 @@ git revert --no-edit 8ca58fc9cdf46a5507c8073714642596bd4cea3d
 
 ![README-aa225fd3](images/README-aa225fd3.png)
 
-Checking `git log`  again should show two new commits to revert the earlier changes.
+Checking `git log` again should show two new commits to revert the earlier changes.
 
 ```
 git log
@@ -764,14 +756,13 @@ watch flux get image repository $GITHUB_APP_REPO
 
 ![README-c9a286d0](images/README-c9a286d0.png)
 
-Here it is showing as  `0 tags` since we still do not have any images been pushed to Amazon Elastic Container Registry.
+Here it is showing as `0 tags` since we still do not have any images been pushed to Amazon Elastic Container Registry.
 
 ### Create an `ImagePolicy` resource to filter, sort and select image tags from ECR repository
 
 An `ImagePolicy` resource defines the rules to filter, sort and select image tags from the image repository. Flux supports `semver` ranges out of the box. In addition the `image-reflector-controller` also supports regular expression based image filtering.
 
 For regular expression based filtering, sorting can be either ascending or descending. The regular expression syntax follows the Go programming language syntax. The pattern specified for `--filter-regex` argument below looks for image tags which start with the fixed prefix ‘`main-`’, followed by an alphanumeric section, followed by a ‘`-`’ character, and ending with a numeric section. The end numeric section specifies a named capturing group ‘`ts`' to capture the Unix epoch timestamp when the image was created. The `--filter-extract` argument refers to the named capturing group from the `--filter-regex` pattern to use for sorting. The `--select-numeric` argument applies numeric sorting and the value ‘`asc`’ determines the direction of sort to be ascending. The three arguments together form the tag selection rule to choose the latest tag based on epoch timestamp.
-
 
 ```
 flux create image policy $GITHUB_APP_REPO \
@@ -788,7 +779,6 @@ Now we have defined a policy to select the latest tag. Go ahead and push the cha
 git add -A && git commit -m "Add ECR ImagePolicy"
 git push
 ```
-
 
 Verify the image policy resource. It will complain about empty version list. This is ok because our ECR repo is empty.
 
@@ -832,14 +822,11 @@ spec:
 EOF
 ```
 
-The `image-automation-controller` will checkout the source repo, locate all the manifest files based on  `update.path` field, commit the changes with commit message from the `messageTemplate` field and push the changes back to the source repo. The `messageTemplate` in the above resource definition will list down the updated image tags in the commit message. The `update.path` field restricts the updates to resources under the `./kustomize` directory only. The controller will update the manifest files at places where it finds placeholder comments like the following:
+The `image-automation-controller` will checkout the source repo, locate all the manifest files based on `update.path` field, commit the changes with commit message from the `messageTemplate` field and push the changes back to the source repo. The `messageTemplate` in the above resource definition will list down the updated image tags in the commit message. The `update.path` field restricts the updates to resources under the `./kustomize` directory only. The controller will update the manifest files at places where it finds placeholder comments like the following:
 
-
-# {“$imagepolicy”: “flux-system:<source repo>”}
-# {“$imagepolicy”: “flux-system:<source repo>:name”}
-# {“$imagepolicy”: “flux-system:<source repo>:tag”}
-
-
+- `# {“$imagepolicy”: “flux-system:<source repo>”}`
+- `# {“$imagepolicy”: “flux-system:<source repo>:name”}`
+- `# {“$imagepolicy”: “flux-system:<source repo>:tag”}`
 
 ```
 git add -A && git commit -m "Add source repo ImageUpdateAutomation"
@@ -888,7 +875,7 @@ Placeholders in `./kustomize/kustomization.yaml` overlay file tell the `image-au
 
 ![README-64150c29](images/README-64150c29.png)
 
-As soon as the ./kustomize/`kustomization.yaml` is reconciled in the cluster the deployment will break momentarily because of the `$AWS_ACCOUNT_ID` and `$AWS_REGION` variables in the `newName` field and also because we currently do not have any images in our repo. We’ll get to that shortly.
+As soon as the `./kustomize/kustomization.yaml` is reconciled in the cluster the deployment will break momentarily because of the `$AWS_ACCOUNT_ID` and `$AWS_REGION` variables in the `newName` field and also because we currently do not have any images in our repo. We’ll get to that shortly.
 
 ![README-fd38520c](images/README-fd38520c.png)
 
@@ -900,11 +887,9 @@ The Dockerfile in base directory is very simple. It copies the static assets and
 
 Now we’ll split the terminal pane into 4 rows to get simultaneous feedback from the image repository, policy and update automation resources.
 
-
 1. Right click on the terminal tab and select `Split Pane in Two Rows`.
 
 ![README-7ea9ebaa](images/README-7ea9ebaa.png)
-
 
 2. Repeat step 1 by right clicking on the first pane two more times to have the below pane configuration.
 
@@ -957,8 +942,6 @@ Validate that you are on the original terminal:
 export | grep -i "AWS_DEFAULT_REGION\|AWS_ACCOUNT_ID"
 ```
 
-
-
 ```
 cd ~/environment/$GITHUB_APP_REPO/scripts
 ./build.sh webserver
@@ -991,7 +974,7 @@ Verify that the change is indeed reflected in your GitHub repo. The branch as sh
 
 ![README-ba99a836](images/README-ba99a836.png)
 
-* * *
+---
 
 ### Clean up application resources
 
