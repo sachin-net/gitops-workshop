@@ -188,7 +188,7 @@ flux check --pre
 The flux project is evolving rapidly and you may find that the pre-check recommends a more recent version like below.
 
 Below warning of upgrading flux version can be safely ignored. The workshop content has been tested with version 0.9.0 and it is ok to continue. We’ll incorporate more recent version in future versions of the workshop.
-[Image: image.png]
+[README-7942fad0](images/README-7942fad0.png)
 
 ### Bootstrap flux tooling
 
