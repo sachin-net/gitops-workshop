@@ -4,7 +4,7 @@
 
 
 ## Table of Contents
-**[Section 1](#section-1)**<br>
+***[Section 1](#section-1)***<br>
 **[Prerequisites](#prerequisites)**<br>
 **[Some Theory first](#some-theory-first)**<br>
 **[The Gitops principle](##the-gitops-principle)**<br>
