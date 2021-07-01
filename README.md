@@ -82,7 +82,7 @@ The IDE window may display a modal asking if third party content may be displaye
 
 ![README-36391605](images/README-36391605.png)
 
-Next we’ll need some CLI tools to be installed in the Cloud9 environment for the workshop. For that we’ll first clone a public repository with the relevant installation scripts. Open the `**Source Control**` view as shown below and clone the [eks-init-scripts](https://github.com/iamsouravin/eks-init-scripts) repository.
+Next we’ll need some CLI tools to be installed in the Cloud9 environment for the workshop. For that we’ll first clone a public repository with the relevant installation scripts. Open the `Source Control` view as shown below and clone the [eks-init-scripts](https://github.com/iamsouravin/eks-init-scripts) repository.
 
 ![README-c0275afc](images/README-c0275afc.png)
 
@@ -167,7 +167,7 @@ export GITHUB_TOKEN=<YOUR_GITHUB_TOKEN>
 export GITHUB_USER=<YOUR_GITHUB_USERNAME>
 export LOCAL_GIT_USERNAME=<Name>   # A friendly username to associate commits with an identity.
 export GITHUB_INFRA_REPO=infra     # This will be created if not present by the flux cli during the bootstrap process.
-export GITHUB_APP_REPO=gitops-demo # This is the main app repo that will be forked & cloned later in the workshop*.*
+export GITHUB_APP_REPO=gitops-demo # This is the main app repo that will be forked & cloned later in the workshop.
 ```
 
 
@@ -297,7 +297,7 @@ cd ~/environment/$GITHUB_INFRA_REPO
 flux create source git $GITHUB_APP_REPO \
   --url=ssh://git@github.com/$GITHUB_USER/$GITHUB_APP_REPO \
   --branch=main \
-  `--``secret``-``ref``=``ssh``-``credentials \`
+  --secret-ref=ssh-credentials \
   --interval=30s \
   --export > ./clusters/prod/$GITHUB_APP_REPO-source.yaml
 ```
