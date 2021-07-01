@@ -15,8 +15,8 @@
 ## Installation Instructions
 
 ## Table of Contents
-**[Section 1](##Section 1)**<br>
-**[Prerequisites](##Prerequisites)**<br>
+**[Section 1](##section-1)**<br>
+**[Prerequisites](##prerequisites)**<br>
 **[Some Theory first](##Some Theory first)**<br>
 **[The Gitops principle](###The Gitops principle)**<br>
 **[Key Gitops benefits](###Key Gitops benefits)**<br>
