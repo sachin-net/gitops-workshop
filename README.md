@@ -4,7 +4,7 @@
 
 ## Section 1
 
-Complexity of this section : Intermediate (Level 200)
+**Complexity of this section** : Intermediate (Level 200)
 
 We would like to familiarize you with the basics of  GitOps and demonstrate building a CD pipeline with EKS using the GitOps principles.  We will be using Flux v2 as a gitops operator, which runs in your EKS cluster and tracks changes to one or more Git repositories. These repositories store all manifests that define the desired state of your cluster, Flux will continuously and automatically reconcile the running state of the cluster with the state declared in code.
 
@@ -632,7 +632,7 @@ watch flux get source git $GITHUB_APP_REPO
 
 ## Section 2
 
-Complexity of this section : Advanced (Level 300)
+**Complexity of this section** : Advanced (Level 300)
 
 This section of the workshop will configure scanning container image tags and deployment roll-outs with Flux.
 
