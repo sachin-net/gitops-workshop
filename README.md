@@ -651,6 +651,12 @@ watch flux get source git $GITHUB_APP_REPO
 
 **This completes the first part of the workshop.**
 
+
+Please take a moment to fill in the survey.
+
+[_https://neoniche.net/2021/aws/summit/workshop/survey/gitops-2nd-july.php_](https://neoniche.net/2021/aws/summit/workshop/survey/gitops-2nd-july.php)
+
+
 ---
 
 ---
@@ -1008,3 +1014,6 @@ flux uninstall
 Congratulations! You have completed the workshop! 🎉
 
 Please fill in the Survey to share your experience about this workshop.
+
+[_https://neoniche.net/2021/aws/summit/workshop/survey/gitops-2nd-july.php_](https://neoniche.net/2021/aws/summit/workshop/survey/gitops-2nd-july.php)
+
